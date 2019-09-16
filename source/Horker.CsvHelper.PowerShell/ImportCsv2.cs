@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
 using CsvHelper.Configuration;
 
 namespace Horker.CsvHelper
@@ -58,7 +61,16 @@ namespace Horker.CsvHelper
         public SwitchParameter Strict = false;
 
         [Parameter(Position = 15, Mandatory = false)]
+        public Type RecordType = null;
+
+        [Parameter(Position = 16, Mandatory = false)]
         public SwitchParameter AsDictionary = false;
+
+        [Parameter(Position = 17, Mandatory = false)]
+        public SwitchParameter AsDataTable = false;
+
+        [Parameter(Position = 18, Mandatory = false)]
+        public IDictionary DataTableColumns = null;
 
         protected override void BeginProcessing()
         {
@@ -92,12 +104,45 @@ namespace Horker.CsvHelper
             };
 
             using (var reader = new StreamReader(Path, Encoding))
-            using (var loader = new CsvLoader(reader, config))
             {
-                if (AsDictionary)
-                    WriteObject(loader.LoadToDictionary());
+                if (RecordType != null)
+                {
+                    using (var csvReader = new CsvReader(reader, csvHelperConfig))
+                    {
+                        while (csvReader.Read())
+                        {
+                            var r = csvReader.GetRecord(RecordType);
+                            WriteObject(r);
+                        }
+                    }
+                }
+                else if (AsDataTable)
+                {
+                    using (var csvReader = new CsvReader(reader, csvHelperConfig))
+                    using (var csvDataReader = new CsvDataReader(csvReader))
+                    {
+                        var dt = new DataTable();
+
+                        if (DataTableColumns != null)
+                        {
+                            foreach (DictionaryEntry entry in DataTableColumns)
+                                dt.Columns.Add((string)entry.Key, (Type)entry.Value);
+                        }
+
+                        dt.Load(csvDataReader);
+                        WriteObject(dt);
+                    }
+                }
                 else
-                    EnumerateAsPSObject(loader);
+                {
+                    using (var loader = new CsvLoader(reader, config))
+                    {
+                        if (AsDictionary)
+                            WriteObject(loader.LoadToDictionary());
+                        else
+                            EnumerateAsPSObject(loader);
+                    }
+                }
             }
         }
 
