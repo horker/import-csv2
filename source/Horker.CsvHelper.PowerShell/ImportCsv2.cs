@@ -70,7 +70,7 @@ namespace Horker.CsvHelper
         public SwitchParameter AsDataTable = false;
 
         [Parameter(Position = 18, Mandatory = false)]
-        public IDictionary DataTableColumns = null;
+        public IDictionary ColumnTypes = null;
 
         protected override void BeginProcessing()
         {
@@ -123,9 +123,9 @@ namespace Horker.CsvHelper
                     {
                         var dt = new DataTable();
 
-                        if (DataTableColumns != null)
+                        if (ColumnTypes != null)
                         {
-                            foreach (DictionaryEntry entry in DataTableColumns)
+                            foreach (DictionaryEntry entry in ColumnTypes)
                                 dt.Columns.Add((string)entry.Key, (Type)entry.Value);
                         }
 
