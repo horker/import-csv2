@@ -89,8 +89,9 @@ namespace Horker.CsvHelper
             };
 
             using (var reader = new StreamReader(Path, Encoding))
+            using (var loader = new CsvLoader(reader, config))
             {
-                WriteObject(CsvLoader.LoadToDictionary(reader, config));
+                WriteObject(loader.LoadToDictionary());
             }
         }
     }
