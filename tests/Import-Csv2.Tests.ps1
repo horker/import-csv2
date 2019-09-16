@@ -1,0 +1,77 @@
+
+function New-DataFile {
+    param(
+        [string]$Data
+    )
+
+    $file = [IO.Path]::GetTempFileName()
+    $data | Set-Content $file
+
+    $file
+}
+
+Describe "Test Import-Csv2" {
+
+    It "can load a white space separated file" {
+        $file = New-DataFile @"
+xxx yyy zzz
+10  20  30
+11  21  31
+"@
+        $d = Import-Csv2 $file -Delimiter ' '
+        $d["xxx"] | Should -Be "10", "11"
+    }
+
+    It "can skip comment lines with the -AllowComments paramter" {
+        $file = New-DataFile @"
+xxx,yyy,zzz
+10,20,30
+# comment
+11,21,31
+#comment2
+"@
+        $d = Import-Csv2 $file -AllowComments
+        $d["xxx"] | Should -Be "10", "11"
+    }
+
+    It "can read a file without a header record" {
+        $file = New-DataFile @"
+10,20,30
+11,21,31
+"@
+        $d = Import-Csv2 $file -NoHeader
+        $d["Column1"] | Should -Be "10", "11"
+    }
+
+    It "can read more columns than the header indicates" {
+        $file = New-DataFile @"
+xxx,yyy
+10,20,30
+11,21,31
+"@
+        $d = Import-Csv2 $file
+        $d["Column3"] | Should -Be "30", "31"
+    }
+
+    It "fills insufficient columns with emtpy strings" {
+        $file = New-DataFile @"
+xxx,yyy
+10,20
+11
+"@
+        $d = Import-Csv2 $file
+        $d["yyy"] | Should -Be "20", ""
+    }
+
+    It "raise an error when -Strict is active and the number of columns are insufficient" {
+        $file = New-DataFile @"
+xxx,yyy
+10,20
+11
+"@
+        {
+            $ErrorActionPreference = "Stop"
+            Import-Csv2 $file -Strict
+        } | Should -Throw "not enough"
+    }
+}
