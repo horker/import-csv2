@@ -57,6 +57,9 @@ namespace Horker.CsvHelper
         [Parameter(Position = 14, Mandatory = false)]
         public SwitchParameter Strict = false;
 
+        [Parameter(Position = 15, Mandatory = false)]
+        public SwitchParameter AsDictionary = false;
+
         protected override void BeginProcessing()
         {
             var csvHelperConfig = new Configuration()
@@ -91,8 +94,32 @@ namespace Horker.CsvHelper
             using (var reader = new StreamReader(Path, Encoding))
             using (var loader = new CsvLoader(reader, config))
             {
-                WriteObject(loader.LoadToDictionary());
+                if (AsDictionary)
+                    WriteObject(loader.LoadToDictionary());
+                else
+                    EnumerateAsPSObject(loader);
             }
+        }
+
+        private void EnumerateAsPSObject(CsvLoader loader)
+        {
+            var columnNames = loader.ColumnNames;
+
+            loader.EnumerateRecords((record, lineNumber) => {
+                var pso = new PSObject();
+
+                int i;
+                for (i = 0; i < Math.Min(columnNames.Length, record.Length); ++i)
+                    pso.Properties.Add(new PSNoteProperty(columnNames[i], record[i]));
+
+                for (; i < columnNames.Length; ++i)
+                    pso.Properties.Add(new PSNoteProperty(columnNames[i], string.Empty));
+
+                for (; i < record.Length; ++i)
+                    pso.Properties.Add(new PSNoteProperty("Column" + (i + 1), record[i]));
+
+                WriteObject(pso);
+            });
         }
     }
 }

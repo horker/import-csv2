@@ -18,6 +18,8 @@ namespace Horker.CsvHelper
         private string[] _columnNames;
         private CsvParser _parser;
 
+        public string[] ColumnNames => _columnNames;
+
         public CsvLoader(StreamReader reader, Config config)
         {
             _reader = reader;
@@ -48,7 +50,7 @@ namespace Horker.CsvHelper
             }
         }
 
-        private void EnumerateRecords(Action<string[], int> operation)
+        public void EnumerateRecords(Action<string[], int> operation)
         {
             int lineNumber = 0;
             while (true)

@@ -12,13 +12,35 @@ function New-DataFile {
 
 Describe "Test Import-Csv2" {
 
+    It "can import a CSV file" {
+        $file = New-DataFile @"
+aa,bb,cc
+10,20,30
+11,21,31
+"@
+        $i = 0
+        Import-Csv2 $file | foreach {
+            if ($i -eq 0) {
+                $_.aa | Should -Be "10"
+                $_.bb | Should -Be "20"
+                $_.cc | Should -Be "30"
+            }
+            else {
+                $_.aa | Should -Be "11"
+                $_.bb | Should -Be "21"
+                $_.cc | Should -Be "31"
+            }
+            ++$i
+        }
+    }
+
     It "can load a white space separated file" {
         $file = New-DataFile @"
 xxx yyy zzz
 10  20  30
 11  21  31
 "@
-        $d = Import-Csv2 $file -Delimiter ' '
+        $d = Import-Csv2 $file -Delimiter ' ' -AsDictionary
         $d["xxx"] | Should -Be "10", "11"
     }
 
@@ -30,7 +52,7 @@ xxx,yyy,zzz
 11,21,31
 #comment2
 "@
-        $d = Import-Csv2 $file -AllowComments
+        $d = Import-Csv2 $file -AllowComments -AsDictionary
         $d["xxx"] | Should -Be "10", "11"
     }
 
@@ -39,7 +61,7 @@ xxx,yyy,zzz
 10,20,30
 11,21,31
 "@
-        $d = Import-Csv2 $file -NoHeader
+        $d = Import-Csv2 $file -NoHeader -AsDictionary
         $d["Column1"] | Should -Be "10", "11"
     }
 
@@ -49,7 +71,7 @@ xxx,yyy
 10,20,30
 11,21,31
 "@
-        $d = Import-Csv2 $file
+        $d = Import-Csv2 $file -AsDictionary
         $d["Column3"] | Should -Be "30", "31"
     }
 
@@ -59,7 +81,7 @@ xxx,yyy
 10,20
 11
 "@
-        $d = Import-Csv2 $file
+        $d = Import-Csv2 $file -AsDictionary
         $d["yyy"] | Should -Be "20", ""
     }
 
