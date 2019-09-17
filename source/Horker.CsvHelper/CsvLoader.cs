@@ -94,11 +94,12 @@ namespace Horker.CsvHelper
             }
         }
 
-        public void EnumerateRecords(Action<string[], int> operation)
+        public IEnumerable<string[]> EnumerateRecords()
         {
             while (_csvReader.Read())
             {
-                var record =_csvReader.Context.Record;
+                var record = _csvReader.Context.Record;
+
                 if (_config.Strict)
                 {
                     if (record.Length > _columnNames.Length)
@@ -108,7 +109,7 @@ namespace Horker.CsvHelper
                         throw new ApplicationException($"Number of columns are not enough at line {_csvReader.Context.Row}");
                 }
 
-                operation.Invoke(record, _csvReader.Context.Row);
+                yield return record;
             }
         }
 
@@ -156,22 +157,16 @@ namespace Horker.CsvHelper
 
                 for (i = 0; i < _columnNames.Length; ++i)
                 {
-                    var type = _columnTypes[i];
-                    if (type != null)
-                    {
-                        var m = typeof(List<>).MakeGenericType(new Type[] { type }).GetConstructor(new Type[] { typeof(int) });
-                        converted[i] = (IList)m.Invoke(new object[] { _config.InitialCapacity });
-                        converterMethods[i] = typeof(CsvLoader).GetMethod("ConvertColumn").MakeGenericMethod(new Type[] { type });
-                    }
-                    else
-                    {
-                        converted[i] = new List<string>(_config.InitialCapacity);
-                        converterMethods[i] = typeof(CsvLoader).GetMethod("ConvertColumn").MakeGenericMethod(new Type[] { typeof(string) });
-                    }
+                    var type = _columnTypes[i] ?? typeof(string);
+
+                    var m = typeof(List<>).MakeGenericType(new Type[] { type }).GetConstructor(new Type[] { typeof(int) });
+                    converted[i] = (IList)m.Invoke(new object[] { _config.InitialCapacity });
+                    converterMethods[i] = typeof(CsvLoader).GetMethod("ConvertColumn").MakeGenericMethod(new Type[] { type });
                 }
             }
 
-            EnumerateRecords((record, lineNumber) => {
+            foreach (var record in EnumerateRecords())
+            {
                 for (var j = record.Length - columns.Count; j > 0; --j)
                 {
                     var newColumn = new List<string>(_config.InitialCapacity);
@@ -197,7 +192,7 @@ namespace Horker.CsvHelper
                         columns[i].Clear();
                     }
                 }
-            });
+            }
 
             var result = new OrderedDictionary();
 

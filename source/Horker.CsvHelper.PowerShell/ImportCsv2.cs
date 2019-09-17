@@ -151,7 +151,8 @@ namespace Horker.CsvHelper
         {
             var columnNames = loader.ColumnNames;
 
-            loader.EnumerateRecords((record, lineNumber) => {
+            foreach (var record in loader.EnumerateRecords())
+            {
                 var pso = new PSObject();
 
                 int i;
@@ -172,7 +173,7 @@ namespace Horker.CsvHelper
                 }
 
                 WriteObject(pso);
-            });
+            }
         }
     }
 }
