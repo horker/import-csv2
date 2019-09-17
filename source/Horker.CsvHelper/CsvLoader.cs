@@ -1,22 +1,30 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 
 namespace Horker.CsvHelper
 {
     public class CsvLoader : IDisposable
     {
+        private readonly int BufferSize = 1024;
+
         private StreamReader _reader;
         private Config _config;
         private string[] _columnNames;
-        private CsvParser _parser;
+        private CsvReader _csvReader;
+        private Type[] _columnTypes;
+        private MemberMapData[] _memberMapData;
 
         public string[] ColumnNames => _columnNames;
 
@@ -24,14 +32,15 @@ namespace Horker.CsvHelper
         {
             _reader = reader;
             _config = config;
-            _parser = new CsvParser(reader, config.CsvHelperConfiguration);
+            _csvReader = new CsvReader(reader, config.CsvHelperConfiguration);
 
             InitializeColumnNames();
+            InitializeMemberMapData();
         }
 
         public void Dispose()
         {
-            _parser.Dispose();
+            _csvReader.Dispose();
         }
 
         private void InitializeColumnNames()
@@ -40,47 +49,127 @@ namespace Horker.CsvHelper
 
             if (_config.CsvHelperConfiguration.HasHeaderRecord)
             {
-                _columnNames = _parser.Read();
-                if (_config.ColumnNames != null)
-                    _columnNames = _config.ColumnNames;
+                if (_csvReader.Read() && _csvReader.ReadHeader())
+                    _columnNames = _csvReader.Context.HeaderRecord;
             }
-            else
+
+            _columnNames = _config.ColumnNames ?? _columnNames ?? new string[0];
+        }
+
+        private void InitializeMemberMapData()
+        {
+            _columnTypes = new Type[_columnNames.Length];
+            _memberMapData = new MemberMapData[_columnNames.Length];
+
+            if (_config.ColumnTypes == null)
+                return;
+
+            foreach (DictionaryEntry entry in _config.ColumnTypes)
             {
-                _columnNames = _config.ColumnNames ?? new string[0];
+                var name = (string)entry.Key;
+                var type = (Type)entry.Value;
+
+                var context = _csvReader.Context;
+                var found = false;
+                for (var i = 0; i < _columnNames.Length; ++i)
+                {
+                    if (_columnNames[i] == name)
+                    {
+                        var converters = _config.CsvHelperConfiguration.TypeConverterCache.GetConverter(type);
+                        var options = context.ReaderConfiguration.TypeConverterOptionsCache.GetOptions(type);
+                        var mapData = new MemberMapData(null)
+                        {
+                            TypeConverter = converters,
+                            TypeConverterOptions = options
+                        };
+
+                        _columnTypes[i] = type;
+                        _memberMapData[i] = mapData;
+                        found = true;
+                    }
+                }
+
+                if (!found)
+                    throw new ArgumentException($"The ColumnTypes parameter contains unknown column name: {name}");
             }
         }
 
         public void EnumerateRecords(Action<string[], int> operation)
         {
-            int lineNumber = 0;
-            while (true)
+            while (_csvReader.Read())
             {
-                ++lineNumber;
-
-                var record = _parser.Read();
-                if (record == null)
-                    break;
-
+                var record =_csvReader.Context.Record;
                 if (_config.Strict)
                 {
                     if (record.Length > _columnNames.Length)
-                        throw new ApplicationException($"Too many columns at line {lineNumber}");
+                        throw new ApplicationException($"Too many columns at line {_csvReader.Context.Row}");
 
                     if (record.Length < _columnNames.Length)
-                        throw new ApplicationException($"Number of columns are not enough at line {lineNumber}");
+                        throw new ApplicationException($"Number of columns are not enough at line {_csvReader.Context.Row}");
                 }
 
-                operation.Invoke(record, lineNumber);
+                operation.Invoke(record, _csvReader.Context.Row);
+            }
+        }
+
+        public object Convert(string value, int index)
+        {
+            if (_memberMapData[index] == null)
+                return value;
+
+            return _memberMapData[index].TypeConverter.ConvertFromString(value, _csvReader, _memberMapData[index]);
+        }
+
+        public void ConvertColumn<T>(List<T> result, List<string> data, int index)
+        {
+            if (typeof(T) == typeof(string))
+            {
+                foreach (var e in data)
+                    result.Add((T)(object)e);
+            }
+            else
+            {
+                foreach (var e in data)
+                    result.Add((T)Convert(e, index));
             }
         }
 
         public OrderedDictionary LoadToDictionary()
         {
+            // Initialize intermediate buffer lists.
+
             var columns = new List<List<string>>(_columnNames.Length);
 
             int i;
             for (i = 0; i < _columnNames.Length; ++i)
-                columns.Add(new List<string>(_config.InitialCapacity));
+                columns.Add(new List<string>(BufferSize));
+
+            // Initialize result lists and converter methods.
+
+            IList[] converted = null;
+            MethodInfo[] converterMethods = null;
+
+            if (_config.ColumnTypes != null)
+            {
+                converted = new IList[_columnNames.Length];
+                converterMethods = new MethodInfo[_columnNames.Length];
+
+                for (i = 0; i < _columnNames.Length; ++i)
+                {
+                    var type = _columnTypes[i];
+                    if (type != null)
+                    {
+                        var m = typeof(List<>).MakeGenericType(new Type[] { type }).GetConstructor(new Type[] { typeof(int) });
+                        converted[i] = (IList)m.Invoke(new object[] { _config.InitialCapacity });
+                        converterMethods[i] = typeof(CsvLoader).GetMethod("ConvertColumn").MakeGenericMethod(new Type[] { type });
+                    }
+                    else
+                    {
+                        converted[i] = new List<string>(_config.InitialCapacity);
+                        converterMethods[i] = typeof(CsvLoader).GetMethod("ConvertColumn").MakeGenericMethod(new Type[] { typeof(string) });
+                    }
+                }
+            }
 
             EnumerateRecords((record, lineNumber) => {
                 for (var j = record.Length - columns.Count; j > 0; --j)
@@ -100,15 +189,37 @@ namespace Horker.CsvHelper
                 for (; i < columns.Count; ++i)
                     columns[i].Add(string.Empty);
 
+                if (converted != null && columns.Count == BufferSize)
+                {
+                    for (i = 0; i < columns.Count; ++i)
+                    {
+                        converterMethods[i].Invoke(this, new object[] { converted[i], columns[i], i });
+                        columns[i].Clear();
+                    }
+                }
             });
 
             var result = new OrderedDictionary();
 
-            for (i = 0; i < Math.Min(_columnNames.Length, columns.Count); ++i)
-                result.Add(_columnNames[i], columns[i]);
+            if (converted == null)
+            {
+                for (i = 0; i < Math.Min(_columnNames.Length, columns.Count); ++i)
+                    result.Add(_columnNames[i], columns[i]);
 
-            for (; i < columns.Count; ++i)
-                result.Add("Column" + (i + 1), columns[i]);
+                for (; i < columns.Count; ++i)
+                    result.Add("Column" + (i + 1), columns[i]);
+            }
+            else
+            {
+                for (i = 0; i < columns.Count; ++i)
+                    converterMethods[i].Invoke(this, new object[] { converted[i], columns[i], i });
+
+                for (i = 0; i < Math.Min(_columnNames.Length, columns.Count); ++i)
+                    result.Add(_columnNames[i], converted[i]);
+
+                for (; i < columns.Count; ++i)
+                    result.Add("Column" + (i + 1), converted[i]);
+            }
 
             return result;
         }

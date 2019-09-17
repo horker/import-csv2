@@ -100,6 +100,7 @@ namespace Horker.CsvHelper
                 CsvHelperConfiguration = csvHelperConfig,
                 InitialCapacity = InitialCapacity,
                 ColumnNames = ColumnNames,
+                ColumnTypes = ColumnTypes,
                 Strict = Strict
             };
 
@@ -155,13 +156,20 @@ namespace Horker.CsvHelper
 
                 int i;
                 for (i = 0; i < Math.Min(columnNames.Length, record.Length); ++i)
-                    pso.Properties.Add(new PSNoteProperty(columnNames[i], record[i]));
+                {
+                    var r = loader.Convert(record[i], i);
+                    pso.Properties.Add(new PSNoteProperty(columnNames[i], r));
+
+                }
 
                 for (; i < columnNames.Length; ++i)
                     pso.Properties.Add(new PSNoteProperty(columnNames[i], string.Empty));
 
                 for (; i < record.Length; ++i)
-                    pso.Properties.Add(new PSNoteProperty("Column" + (i + 1), record[i]));
+                {
+                    var r = loader.Convert(record[i], i);
+                    pso.Properties.Add(new PSNoteProperty("Column" + (i + 1), r));
+                }
 
                 WriteObject(pso);
             });

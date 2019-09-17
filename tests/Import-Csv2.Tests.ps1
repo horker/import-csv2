@@ -103,7 +103,7 @@ xxx,yyy
 
     }
 
-    It "can map records to object instance by specifying a type" {
+    It "can map records to object instance by specifying a record type" {
         $file = New-DataFile @"
 Int,String,Double
 10,xxx,1.0
@@ -115,5 +115,23 @@ Int,String,Double
         $d[0] | Should -BeOfType ([Rec])
         $d[0].Int | Should -Be 10
         $d[1].String | Should -Be "yyy"
+    }
+
+    It "can convert field values to a specified type" {
+        $file = New-DataFile @"
+Int,String,Double
+10,xxx,1.0
+20,yyy,2.0
+"@
+        $d = Import-Csv2 $file -AsDictionary -ColumnTypes @{ Int = [int]; Double = [double] }
+
+        $d["Int"][0] | Should -BeOfType ([int])
+        $d["Int"] | Should -Be 10, 20
+
+        $d["String"][0] | Should -BeOfType ([string])
+        $d["String"] | Should -Be "xxx", "yyy"
+
+        $d["Double"][0] | Should -BeOfType ([double])
+        $d["Double"] | Should -Be 1.0, 2.0
     }
 }
