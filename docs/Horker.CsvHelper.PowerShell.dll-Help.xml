@@ -1,0 +1,535 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Import-Csv2</command:name>
+      <command:verb>Import</command:verb>
+      <command:noun>Csv2</command:noun>
+      <maml:description>
+        <maml:para>Import a CSV file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Import a CSV file.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Import-Csv2</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:Description>
+            <maml:para>Indicates the input CSV file.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the text encoding of the input file.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
+          <maml:name>QuoteChar</maml:name>
+          <maml:Description>
+            <maml:para>Sets the character used to quote fields. Default is '"'.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Quote`.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Char</command:parameterValue>
+          <dev:type>
+            <maml:name>Char</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
+          <maml:name>TrimOption</maml:name>
+          <maml:Description>
+            <maml:para>Sets the field trimming options. Default is `Trim`.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Trim</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InsideQuotes</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">TrimOptions</command:parameterValue>
+          <dev:type>
+            <maml:name>TrimOptions</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
+          <maml:name>InitialCapacity</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the initial capacity of the List object that is created when the `-AsDictionary` parameter is set.</maml:para>
+            <maml:para>This parameter is effective in combination with hte `-AsDictionary` parameter.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="none">
+          <maml:name>ColumnNames</maml:name>
+          <maml:Description>
+            <maml:para>Specifies new column names.</maml:para>
+            <maml:para>This parameter will be ignored when the `-RecordType` or `-AsDataTable` parameter is specified.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="14" aliases="none">
+          <maml:name>Strict</maml:name>
+          <maml:Description>
+            <maml:para>Indicates to raise an error when the number of fields is different from that of the header record.</maml:para>
+            <maml:para>This parameter will be ignored when the `-RecordType` or `-AsDataTable` parameter is specified.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="15" aliases="none">
+          <maml:name>RecordType</maml:name>
+          <maml:Description>
+            <maml:para>Indicates the record type into which the record will be mapped.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Type</command:parameterValue>
+          <dev:type>
+            <maml:name>Type</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="16" aliases="none">
+          <maml:name>AsDictionary</maml:name>
+          <maml:Description>
+            <maml:para>Indicates to produce an output as a `OrderedDictionary` object.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="17" aliases="none">
+          <maml:name>AsDataTable</maml:name>
+          <maml:Description>
+            <maml:para>Indicates to produce an output as a `DataTable` object.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="18" aliases="none">
+          <maml:name>ColumnTypes</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the types of columns. It should be a dictionary of a column name and its type.</maml:para>
+            <maml:para>This parameter will be ignored when the `-RecordType` parameter is specified.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+          <dev:type>
+            <maml:name>IDictionary</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>AllowComments</maml:name>
+          <maml:Description>
+            <maml:para>Sets a value indicating if comments are allowed. True to allow commented out lines, otherwise false.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.AllowComments`.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>BufferSize</maml:name>
+          <maml:Description>
+            <maml:para>Sets the size of the buffer used for reading CSV files. Default is 2048.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.BufferSize`.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+          <maml:name>CommentChar</maml:name>
+          <maml:Description>
+            <maml:para>Sets the character used to denote a line that is commented out. Default is '#'.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Comment`.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Char</command:parameterValue>
+          <dev:type>
+            <maml:name>Char</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+          <maml:name>Delimiter</maml:name>
+          <maml:Description>
+            <maml:para>Sets the delimiter used to separate fields. Default is `CultureInfo.TextInfo.ListSeparator`.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Delimiter`.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+          <maml:name>EscapeChar</maml:name>
+          <maml:Description>
+            <maml:para>Sets the escape character used to escape a quote inside a field. Default is '"'.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Escape`.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Char</command:parameterValue>
+          <dev:type>
+            <maml:name>Char</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+          <maml:name>KeepBlankLines</maml:name>
+          <maml:Description>
+            <maml:para>Sets a value indicating if blank lines should be ignored when reading. True to ignore, otherwise false. Default is false.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.IgnoreBlankLines`, but its meaning is opposite.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+          <maml:name>IgnoreQuote</maml:name>
+          <maml:Description>
+            <maml:para>Sets a value indicating if quotes should be ignored when parsing and treated like any other character.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.IgnoreQuote`.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoHeaderRecord</maml:name>
+          <maml:Description>
+            <maml:para>Sets a value indicating if the CSV file has a header record. Default is false.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.HasHeaderRecord`, but its meaning is opposite.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>AllowComments</maml:name>
+        <maml:Description>
+          <maml:para>Sets a value indicating if comments are allowed. True to allow commented out lines, otherwise false.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.AllowComments`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="17" aliases="none">
+        <maml:name>AsDataTable</maml:name>
+        <maml:Description>
+          <maml:para>Indicates to produce an output as a `DataTable` object.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="16" aliases="none">
+        <maml:name>AsDictionary</maml:name>
+        <maml:Description>
+          <maml:para>Indicates to produce an output as a `OrderedDictionary` object.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>BufferSize</maml:name>
+        <maml:Description>
+          <maml:para>Sets the size of the buffer used for reading CSV files. Default is 2048.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.BufferSize`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="none">
+        <maml:name>ColumnNames</maml:name>
+        <maml:Description>
+          <maml:para>Specifies new column names.</maml:para>
+          <maml:para>This parameter will be ignored when the `-RecordType` or `-AsDataTable` parameter is specified.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="18" aliases="none">
+        <maml:name>ColumnTypes</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the types of columns. It should be a dictionary of a column name and its type.</maml:para>
+          <maml:para>This parameter will be ignored when the `-RecordType` parameter is specified.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+        <dev:type>
+          <maml:name>IDictionary</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>CommentChar</maml:name>
+        <maml:Description>
+          <maml:para>Sets the character used to denote a line that is commented out. Default is '#'.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Comment`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Char</command:parameterValue>
+        <dev:type>
+          <maml:name>Char</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <maml:name>Delimiter</maml:name>
+        <maml:Description>
+          <maml:para>Sets the delimiter used to separate fields. Default is `CultureInfo.TextInfo.ListSeparator`.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Delimiter`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Encoding</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the text encoding of the input file.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+        <dev:type>
+          <maml:name>Encoding</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>EscapeChar</maml:name>
+        <maml:Description>
+          <maml:para>Sets the escape character used to escape a quote inside a field. Default is '"'.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Escape`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Char</command:parameterValue>
+        <dev:type>
+          <maml:name>Char</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+        <maml:name>IgnoreQuote</maml:name>
+        <maml:Description>
+          <maml:para>Sets a value indicating if quotes should be ignored when parsing and treated like any other character.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.IgnoreQuote`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
+        <maml:name>InitialCapacity</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the initial capacity of the List object that is created when the `-AsDictionary` parameter is set.</maml:para>
+          <maml:para>This parameter is effective in combination with hte `-AsDictionary` parameter.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+        <maml:name>KeepBlankLines</maml:name>
+        <maml:Description>
+          <maml:para>Sets a value indicating if blank lines should be ignored when reading. True to ignore, otherwise false. Default is false.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.IgnoreBlankLines`, but its meaning is opposite.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:Description>
+          <maml:para>Indicates the input CSV file.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
+        <maml:name>QuoteChar</maml:name>
+        <maml:Description>
+          <maml:para>Sets the character used to quote fields. Default is '"'.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.Quote`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Char</command:parameterValue>
+        <dev:type>
+          <maml:name>Char</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="15" aliases="none">
+        <maml:name>RecordType</maml:name>
+        <maml:Description>
+          <maml:para>Indicates the record type into which the record will be mapped.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Type</command:parameterValue>
+        <dev:type>
+          <maml:name>Type</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="14" aliases="none">
+        <maml:name>Strict</maml:name>
+        <maml:Description>
+          <maml:para>Indicates to raise an error when the number of fields is different from that of the header record.</maml:para>
+          <maml:para>This parameter will be ignored when the `-RecordType` or `-AsDataTable` parameter is specified.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
+        <maml:name>TrimOption</maml:name>
+        <maml:Description>
+          <maml:para>Sets the field trimming options. Default is `Trim`.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">TrimOptions</command:parameterValue>
+        <dev:type>
+          <maml:name>TrimOptions</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoHeaderRecord</maml:name>
+        <maml:Description>
+          <maml:para>Sets a value indicating if the CSV file has a header record. Default is false.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.HasHeaderRecord`, but its meaning is opposite.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/horker/pscsvhelper/blob/docs/Import-Csv2.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+</helpItems>

@@ -37,7 +37,7 @@ namespace Horker.CsvHelper
         public char EscapeChar;
 
         [Parameter(Position = 7, Mandatory = false)]
-        public SwitchParameter NoHeader = false;
+        public SwitchParameter NoHeaderRecord = false;
 
         [Parameter(Position = 8, Mandatory = false)]
         public SwitchParameter KeepBlankLines = false;
@@ -79,7 +79,7 @@ namespace Horker.CsvHelper
                 AllowComments = AllowComments,
                 BufferSize = BufferSize,
                 Comment = CommentChar,
-                HasHeaderRecord = !NoHeader,
+                HasHeaderRecord = !NoHeaderRecord,
                 IgnoreBlankLines = !KeepBlankLines,
                 IgnoreQuotes = IgnoreQuote,
                 TrimOptions = TrimOption

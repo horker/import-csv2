@@ -22,6 +22,8 @@ $OBJECT_FILES = @(
     "Horker.CsvHelper.PowerShell.pdb"
 )
 
+$HELP_XML = "$PSScriptRoot\docs\Horker.CsvHelper.PowerShell.dll-Help.xml"
+
 #TODO
 #$LIBRARY_PATH = "
 
@@ -112,17 +114,19 @@ task Build {
 
     Copy-ObjectFiles $MODULE_PATH "$SOURCE_PATH\bin\Release"
     Copy-ObjectFiles $MODULE_PATH_DEBUG "$SOURCE_PATH\bin\Debug"
+
+    Copy-Item2 $HELP_XML $MODULE_PATH
+    Copy-Item2 $HELP_XML $MODULE_PATH_DEBUG
   }
 }
 
-#task BuildHelp `
-#  -Inputs $HELP_INPUT `
-#  -Outputs $HELP_OUTPUT `
-#{
-#  . $HELPGEN $HELP_INPUT
-#
-#  Copy-Item $HELP_INTERM $MODULE_PATH
-#}
+task UpdateHelp {
+    Update-MarkdownHelp docs\
+}
+
+task CompileHelp {
+    New-ExternalHelp docs\ -outputpath docs\ -force
+}
 
 task Test Build, ImportDebug, {
   Invoke-Pester "$PSScriptRoot\tests"
