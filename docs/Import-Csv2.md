@@ -17,7 +17,7 @@ Import-Csv2 [-Path] <String> [[-Encoding] <Encoding>] [-AllowComments] [[-Buffer
  [[-CommentChar] <Char>] [[-Delimiter] <String>] [[-EscapeChar] <Char>] [-NoHeaderRecord] [-KeepBlankLines]
  [-IgnoreQuote] [[-QuoteChar] <Char>] [[-TrimOption] <TrimOptions>] [[-InitialCapacity] <Int32>]
  [[-ColumnNames] <String[]>] [-Strict] [[-RecordType] <Type>] [-AsDictionary] [-AsDataTable]
- [[-ColumnTypes] <IDictionary>] [<CommonParameters>]
+ [[-ColumnTypes] <IDictionary>] [-Culture <CultureInfo>] [-ColumnNameMap <IDictionary>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -329,6 +329,40 @@ This parameter corresponds to `CsvHelper.Configuration.Configuration.HasHeaderRe
 
 ```yaml
 Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ColumnNameMap
+Specifies the mapping from the field names in the input file to the field names in the output object.
+
+With the `-RecordType` parameter, this parameter represents the mapping from the class member names to the field names or the column index in the input file.
+
+```yaml
+Type: IDictionary
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Culture
+Specifies the culture that is used when type conversions.
+
+This parameter corresponds to `CsvHelper.Configuration.Configuration.CultureInfo`.
+
+```yaml
+Type: CultureInfo
 Parameter Sets: (All)
 Aliases:
 

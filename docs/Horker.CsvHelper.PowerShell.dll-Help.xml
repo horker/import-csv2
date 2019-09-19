@@ -254,6 +254,31 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ColumnNameMap</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the mapping from the field names in the input file to the field names in the output object.</maml:para>
+            <maml:para>With the `-RecordType` parameter, this parameter represents the mapping from the class member names to the field names or the column index in the input file.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+          <dev:type>
+            <maml:name>IDictionary</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Culture</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the culture that is used when type conversions.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">CultureInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>CultureInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -497,6 +522,31 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ColumnNameMap</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the mapping from the field names in the input file to the field names in the output object.</maml:para>
+          <maml:para>With the `-RecordType` parameter, this parameter represents the mapping from the class member names to the field names or the column index in the input file.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
+        <dev:type>
+          <maml:name>IDictionary</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Culture</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the culture that is used when type conversions.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">CultureInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>CultureInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
