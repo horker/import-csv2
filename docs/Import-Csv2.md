@@ -17,7 +17,8 @@ Import-Csv2 [-Path] <String> [[-Encoding] <Encoding>] [-AllowComments] [[-Buffer
  [[-CommentChar] <Char>] [[-Delimiter] <String>] [[-EscapeChar] <Char>] [-NoHeaderRecord] [-KeepBlankLines]
  [-IgnoreQuote] [[-QuoteChar] <Char>] [[-TrimOption] <TrimOptions>] [[-InitialCapacity] <Int32>]
  [[-ColumnNames] <String[]>] [-Strict] [[-RecordType] <Type>] [-AsDictionary] [-AsDataTable]
- [[-ColumnTypes] <IDictionary>] [-Culture <CultureInfo>] [-ColumnNameMap <IDictionary>] [<CommonParameters>]
+ [[-ColumnTypes] <IDictionary>] [-Culture <CultureInfo>] [-ColumnNameMap <IDictionary>]
+ [-Configuration <Configuration>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -357,12 +358,27 @@ Accept wildcard characters: False
 ```
 
 ### -Culture
-Specifies the culture that is used when type conversions.
+Specifies the culture that is used when type conversion is performed.
 
 This parameter corresponds to `CsvHelper.Configuration.Configuration.CultureInfo`.
 
 ```yaml
 Type: CultureInfo
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Configuration
+Specifies a `CsvHelper.Configuration.Configuration` object.
+
+```yaml
+Type: Configuration
 Parameter Sets: (All)
 Aliases:
 

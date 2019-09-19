@@ -270,11 +270,24 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Culture</maml:name>
           <maml:Description>
-            <maml:para>Specifies the culture that is used when type conversions.</maml:para>
+            <maml:para>Specifies the culture that is used when type conversion is performed.</maml:para>
+            <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.CultureInfo`.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">CultureInfo</command:parameterValue>
           <dev:type>
             <maml:name>CultureInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Configuration</maml:name>
+          <maml:Description>
+            <maml:para>Specifies a `CsvHelper.Configuration.Configuration` object.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Configuration</command:parameterValue>
+          <dev:type>
+            <maml:name>Configuration</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -539,11 +552,24 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Culture</maml:name>
         <maml:Description>
-          <maml:para>Specifies the culture that is used when type conversions.</maml:para>
+          <maml:para>Specifies the culture that is used when type conversion is performed.</maml:para>
+          <maml:para>This parameter corresponds to `CsvHelper.Configuration.Configuration.CultureInfo`.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">CultureInfo</command:parameterValue>
         <dev:type>
           <maml:name>CultureInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Configuration</maml:name>
+        <maml:Description>
+          <maml:para>Specifies a `CsvHelper.Configuration.Configuration` object.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Configuration</command:parameterValue>
+        <dev:type>
+          <maml:name>Configuration</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

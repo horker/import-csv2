@@ -80,20 +80,22 @@ namespace Horker.CsvHelper
         [Parameter(Position = 20, Mandatory = false)]
         public IDictionary ColumnNameMap = null;
 
+        [Parameter(Position = 21, Mandatory = false)]
+        public Configuration Configuration = null;
+
         private Config _config;
 
         protected override void BeginProcessing()
         {
-            var csvHelperConfig = new Configuration()
-            {
-                AllowComments = AllowComments,
-                BufferSize = BufferSize,
-                Comment = CommentChar,
-                HasHeaderRecord = !NoHeaderRecord,
-                IgnoreBlankLines = !KeepBlankLines,
-                IgnoreQuotes = IgnoreQuote,
-                TrimOptions = TrimOption
-            };
+            var csvHelperConfig = Configuration ?? new Configuration();
+
+            csvHelperConfig.AllowComments = AllowComments;
+            csvHelperConfig.BufferSize = BufferSize;
+            csvHelperConfig.Comment = CommentChar;
+            csvHelperConfig.HasHeaderRecord = !NoHeaderRecord;
+            csvHelperConfig.IgnoreBlankLines = !KeepBlankLines;
+            csvHelperConfig.IgnoreQuotes = IgnoreQuote;
+            csvHelperConfig.TrimOptions = TrimOption;
 
             var p = MyInvocation.BoundParameters;
             if (p.ContainsKey("Delimiter"))
