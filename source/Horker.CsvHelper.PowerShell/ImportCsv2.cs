@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -76,6 +77,11 @@ namespace Horker.CsvHelper
         [Parameter(Position = 19, Mandatory = false)]
         public CultureInfo Culture = CultureInfo.CurrentCulture;
 
+        [Parameter(Position = 20, Mandatory = false)]
+        public IDictionary ColumnNameMap = null;
+
+        private Config _config;
+
         protected override void BeginProcessing()
         {
             var csvHelperConfig = new Configuration()
@@ -99,7 +105,7 @@ namespace Horker.CsvHelper
             if (p.ContainsKey("QuoteChar"))
                 csvHelperConfig.Quote = QuoteChar;
 
-            var config = new Config()
+            _config = new Config()
             {
                 CsvHelperConfiguration = csvHelperConfig,
                 InitialCapacity = InitialCapacity,
@@ -113,6 +119,13 @@ namespace Horker.CsvHelper
             {
                 if (RecordType != null)
                 {
+                    if (ColumnNameMap != null)
+                    {
+                        var gm = typeof(ImportCsv2).GetMethod("DefineClassMap", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var m = gm.MakeGenericMethod(new Type[] { RecordType });
+                        m.Invoke(this, new object[0]);
+                    }
+
                     using (var csvReader = new CsvReader(reader, csvHelperConfig))
                     {
                         while (csvReader.Read())
@@ -141,7 +154,7 @@ namespace Horker.CsvHelper
                 }
                 else
                 {
-                    using (var loader = new CsvLoader(reader, config))
+                    using (var loader = new CsvLoader(reader, _config))
                     {
                         if (AsDictionary)
                             WriteObject(loader.LoadToDictionary());
@@ -150,6 +163,21 @@ namespace Horker.CsvHelper
                     }
                 }
             }
+        }
+
+        private void DefineClassMap<T>()
+        {
+            var map = new DefaultClassMap<T>();
+            foreach (DictionaryEntry entry in ColumnNameMap)
+            {
+                var member = RecordType.GetMember((string)entry.Key)[0];
+                if (entry.Value is string name)
+                    map.Map(typeof(T), member).Name(name);
+                else if (entry.Value is int index)
+                    map.Map(typeof(T), member).Index(index);
+            }
+
+            _config.CsvHelperConfiguration.RegisterClassMap(map);
         }
 
         private void EnumerateAsPSObject(CsvLoader loader)

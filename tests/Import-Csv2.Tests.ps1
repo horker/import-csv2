@@ -117,6 +117,23 @@ Int,String,Double
         $d[1].String | Should -Be "yyy"
     }
 
+    It "can accept the type name mapping" {
+        $file = New-DataFile @"
+a,b,c
+10,xxx,1.0
+20,yyy,2.0
+"@
+        $d = Import-Csv2 $file -RecordType Rec -ColumnNameMap @{
+            Int = "a"
+            String = "b"
+        }
+
+        $d.Length | Should -Be 2
+        $d[0] | Should -BeOfType Rec
+        $d[0].Int | Should -Be 10
+        $d[1].String | Should -Be "yyy"
+    }
+
     It "can convert field values to a specified type" {
         $file = New-DataFile @"
 Int,String,Double
