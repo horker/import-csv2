@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -77,6 +78,8 @@ namespace Horker.CsvHelper
                     {
                         var converters = _config.CsvHelperConfiguration.TypeConverterCache.GetConverter(type);
                         var options = context.ReaderConfiguration.TypeConverterOptionsCache.GetOptions(type);
+                        options.CultureInfo = options.CultureInfo ?? CultureInfo.CurrentCulture;
+
                         var mapData = new MemberMapData(null)
                         {
                             TypeConverter = converters,
