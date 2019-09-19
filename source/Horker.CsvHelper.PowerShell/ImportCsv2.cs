@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
@@ -72,6 +73,9 @@ namespace Horker.CsvHelper
         [Parameter(Position = 18, Mandatory = false)]
         public IDictionary ColumnTypes = null;
 
+        [Parameter(Position = 19, Mandatory = false)]
+        public CultureInfo Culture = CultureInfo.CurrentCulture;
+
         protected override void BeginProcessing()
         {
             var csvHelperConfig = new Configuration()
@@ -101,7 +105,8 @@ namespace Horker.CsvHelper
                 InitialCapacity = InitialCapacity,
                 ColumnNames = ColumnNames,
                 ColumnTypes = ColumnTypes,
-                Strict = Strict
+                Strict = Strict,
+                Culture = Culture
             };
 
             using (var reader = new StreamReader(Path, Encoding))

@@ -78,7 +78,7 @@ namespace Horker.CsvHelper
                     {
                         var converters = _config.CsvHelperConfiguration.TypeConverterCache.GetConverter(type);
                         var options = context.ReaderConfiguration.TypeConverterOptionsCache.GetOptions(type);
-                        options.CultureInfo = options.CultureInfo ?? CultureInfo.CurrentCulture;
+                        options.CultureInfo = options.CultureInfo ?? _config.Culture;
 
                         var mapData = new MemberMapData(null)
                         {
