@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -31,6 +32,8 @@ namespace Horker.CsvHelper
         private BlockingCollection<string> _queue;
         private MemoryStream _stream;
         private StreamWriter _writer;
+        private CancellationTokenSource _cancellationSource;
+        private CancellationToken _cancellationToken;
 
         public string[] ColumnNames => _columnNames;
 
@@ -47,6 +50,9 @@ namespace Horker.CsvHelper
                 _stream = new MemoryStream();
                 _writer = new StreamWriter(_stream);
                 _reader = new StreamReader(_stream);
+
+                _cancellationSource = new CancellationTokenSource();
+                _cancellationToken = _cancellationSource.Token;
             }
 
             _csvReader = new CsvReader(_reader, config.CsvHelperConfiguration);
@@ -173,7 +179,7 @@ namespace Horker.CsvHelper
 
         private bool WaitQueue()
         {
-            var line = _queue.Take();
+            var line = _queue.Take(_cancellationToken);
             if (line == null)
                 return false;
 
@@ -183,6 +189,11 @@ namespace Horker.CsvHelper
             _stream.Position = pos;
 
             return true;
+        }
+
+        public void Cancel()
+        {
+            _cancellationSource.Cancel();
         }
 
         public bool Read()
@@ -198,20 +209,28 @@ namespace Horker.CsvHelper
             }
             else
             {
-                if (_columnNames == null)
+                try
                 {
-                    WaitQueue();
-                    Initialize();
+                    if (_columnNames == null)
+                    {
+                        if (WaitQueue() == false)
+                            return false;
+                        Initialize();
+                    }
+
+                    if (WaitQueue() == false)
+                        return false;
+
+                    result = _csvReader.Read();
+                    Debug.Assert(result);
+                    CheckRecord();
+
+                    return true;
                 }
-
-                if (WaitQueue() == false)
+                catch (OperationCanceledException)
+                {
                     return false;
-
-                result = _csvReader.Read();
-                Debug.Assert(result);
-                CheckRecord();
-
-                return true;
+                }
             }
         }
 

@@ -184,4 +184,10 @@ a,b,c
         $d[1].b | Should -Be "yyy"
         $d[2].c | Should -Be 2.0
     }
+
+    It "returns nothign for empty imput" {
+        $d = Import-Csv2
+
+        $d | Should -Be $null
+    }
 }
