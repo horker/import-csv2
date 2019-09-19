@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -17,6 +18,7 @@ using CsvHelper.Configuration;
 namespace Horker.CsvHelper
 {
     [Cmdlet("Import", "Csv2")]
+    [OutputType(typeof(PSObject), typeof(DataTable), typeof(OrderedDictionary), typeof(object))]
     public class ImportCsv2 : PSCmdlet
     {
         [Parameter(Position = 0, Mandatory = false)]
