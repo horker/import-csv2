@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -27,21 +28,57 @@ namespace Horker.CsvHelper
         private Type[] _columnTypes;
         private MemberMapData[] _memberMapData;
 
+        private BlockingCollection<string> _queue;
+        private MemoryStream _stream;
+        private StreamWriter _writer;
+
         public string[] ColumnNames => _columnNames;
+
+        public string[] Record => _csvReader.Context.Record;
 
         public CsvLoader(StreamReader reader, Config config)
         {
             _reader = reader;
             _config = config;
-            _csvReader = new CsvReader(reader, config.CsvHelperConfiguration);
 
-            InitializeColumnNames();
-            InitializeMemberMapData();
+            if (reader == null)
+            {
+                _queue = new BlockingCollection<string>();
+                _stream = new MemoryStream();
+                _writer = new StreamWriter(_stream);
+                _reader = new StreamReader(_stream);
+            }
+
+            _csvReader = new CsvReader(_reader, config.CsvHelperConfiguration);
+
+            if (reader != null || !_config.CsvHelperConfiguration.HasHeaderRecord)
+                Initialize();
         }
 
         public void Dispose()
         {
+            if (_queue != null)
+                _queue.Dispose();
+
+            if (_stream != null)
+                _stream.Dispose();
+
+            if (_writer != null)
+                _stream.Dispose();
+
+            if (_reader != null)
+                _reader.Dispose();
+
             _csvReader.Dispose();
+        }
+
+        private void Initialize()
+        {
+            if (_columnNames != null)
+                return;
+
+            InitializeColumnNames();
+            InitializeMemberMapData();
         }
 
         private void InitializeColumnNames()
@@ -110,23 +147,77 @@ namespace Horker.CsvHelper
             }
         }
 
-        public IEnumerable<string[]> EnumerateRecords()
+        private void CheckRecord()
         {
-            while (_csvReader.Read())
+            var record = _csvReader.Context.Record;
+
+            if (_config.Strict)
             {
-                var record = _csvReader.Context.Record;
+                if (record.Length > _columnNames.Length)
+                    throw new ApplicationException($"Too many columns at line {_csvReader.Context.Row}");
 
-                if (_config.Strict)
+                if (record.Length < _columnNames.Length)
+                    throw new ApplicationException($"Number of columns are not enough at line {_csvReader.Context.Row}");
+            }
+        }
+
+        public void WriteLine(string line)
+        {
+            _queue.Add(line);
+        }
+
+        public void Finish()
+        {
+            _queue.Add(null);
+        }
+
+        private bool WaitQueue()
+        {
+            var line = _queue.Take();
+            if (line == null)
+                return false;
+
+            var pos = _stream.Position;
+            _writer.WriteLine(line);
+            _writer.Flush();
+            _stream.Position = pos;
+
+            return true;
+        }
+
+        public bool Read()
+        {
+            bool result;
+            if (_queue == null)
+            {
+                result = _csvReader.Read();
+                if (result)
+                    CheckRecord();
+
+                return result;
+            }
+            else
+            {
+                if (_columnNames == null)
                 {
-                    if (record.Length > _columnNames.Length)
-                        throw new ApplicationException($"Too many columns at line {_csvReader.Context.Row}");
-
-                    if (record.Length < _columnNames.Length)
-                        throw new ApplicationException($"Number of columns are not enough at line {_csvReader.Context.Row}");
+                    WaitQueue();
+                    Initialize();
                 }
 
-                yield return record;
+                if (WaitQueue() == false)
+                    return false;
+
+                result = _csvReader.Read();
+                Debug.Assert(result);
+                CheckRecord();
+
+                return true;
             }
+        }
+
+        public object GetRecord(Type type)
+        {
+            return _csvReader.GetRecord(type);
         }
 
         public object Convert(string value, int index)
@@ -153,6 +244,8 @@ namespace Horker.CsvHelper
 
         public OrderedDictionary LoadToDictionary()
         {
+            Initialize();
+
             // Initialize intermediate buffer lists.
 
             var columns = new List<List<string>>(_columnNames.Length);
@@ -181,8 +274,9 @@ namespace Horker.CsvHelper
                 }
             }
 
-            foreach (var record in EnumerateRecords())
+            while (Read())
             {
+                var record = Record;
                 for (var j = record.Length - columns.Count; j > 0; --j)
                 {
                     var newColumn = new List<string>(_config.InitialCapacity);

@@ -169,4 +169,19 @@ Int,String,Double
         $d["Double"][0] | Should -BeOfType ([double])
         $d["Double"] | Should -Be 1.0, 2.0
     }
+
+    It "can accept the pipeline input" {
+        $file = New-DataFile @"
+a,b,c
+10,xxx,1.0
+20,yyy,2.0
+30,zzz,2.0
+"@
+        $d = Get-Content $file | Import-Csv2
+
+        $d.Count | Should -Be 3
+        $d[0].a | Should -Be 10
+        $d[1].b | Should -Be "yyy"
+        $d[2].c | Should -Be 2.0
+    }
 }
