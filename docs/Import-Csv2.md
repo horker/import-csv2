@@ -13,12 +13,12 @@ Import a CSV file.
 ## SYNTAX
 
 ```
-Import-Csv2 [-Path] <String> [[-Encoding] <Encoding>] [-AllowComments] [[-BufferSize] <Int32>]
+Import-Csv2 [[-Path] <String>] [[-Encoding] <Encoding>] [-AllowComments] [[-BufferSize] <Int32>]
  [[-CommentChar] <Char>] [[-Delimiter] <String>] [[-EscapeChar] <Char>] [-NoHeaderRecord] [-KeepBlankLines]
  [-IgnoreQuote] [[-QuoteChar] <Char>] [[-TrimOption] <TrimOptions>] [[-InitialCapacity] <Int32>]
  [[-ColumnNames] <String[]>] [-Strict] [[-RecordType] <Type>] [-AsDictionary] [-AsDataTable]
  [[-ColumnTypes] <IDictionary>] [-Culture <CultureInfo>] [-ColumnNameMap <IDictionary>]
- [-Configuration <Configuration>] [<CommonParameters>]
+ [-Configuration <Configuration>] [-InputObject <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -251,7 +251,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 0
 Default value: None
 Accept pipeline input: False
@@ -386,6 +386,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InputObject
+Specifies the CSV strings to be converted to objects.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

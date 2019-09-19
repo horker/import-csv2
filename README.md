@@ -86,6 +86,7 @@ The following parsing options are available:
 |-QuoteChar|Specifies a quoting character.|
 |-NoHeaderRecord|Indicates if the CSV file has a header record.|
 |-ColumnNames|Specifies column names to override the header record.|
+|-ColumnNameMap|Specifies mapping from the header field names to the column names of the output.|
 |-AllowComments|Indicates to allow comments that begin with '#' by default.|
 |-CommentChar|Specifies a comment character.|
 |-IgnoreQuote|Indicates to ignore quoting.|
