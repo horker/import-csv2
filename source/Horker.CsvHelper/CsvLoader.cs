@@ -54,7 +54,20 @@ namespace Horker.CsvHelper
                     _columnNames = _csvReader.Context.HeaderRecord;
             }
 
-            _columnNames = _config.ColumnNames ?? _columnNames ?? new string[0];
+            if (_config.ColumnNames != null)
+                _columnNames = _config.ColumnNames;
+
+            if (_config.ColumnNameMap != null)
+            {
+                for (var i = 0; i < _columnNames.Length; ++i)
+                {
+                    if (_config.ColumnNameMap.Contains(_columnNames[i]))
+                        _columnNames[i] = (string)_config.ColumnNameMap[_columnNames[i]];
+                }
+            }
+
+            if (_columnNames == null)
+                _columnNames = new string[0];
         }
 
         private void InitializeMemberMapData()

@@ -110,6 +110,7 @@ namespace Horker.CsvHelper
                 CsvHelperConfiguration = csvHelperConfig,
                 InitialCapacity = InitialCapacity,
                 ColumnNames = ColumnNames,
+                ColumnNameMap = ColumnNameMap,
                 ColumnTypes = ColumnTypes,
                 Strict = Strict,
                 Culture = Culture

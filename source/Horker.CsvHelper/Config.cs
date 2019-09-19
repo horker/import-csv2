@@ -14,6 +14,7 @@ namespace Horker.CsvHelper
         public Configuration CsvHelperConfiguration { get; set; } = null;
         public int InitialCapacity { get; set; } = 1024;
         public string[] ColumnNames { get; set; } = null;
+        public IDictionary ColumnNameMap { get; set; } = null;
         public IDictionary ColumnTypes { get; set; } = null;
         public bool Strict { get; set; } = false;
         public CultureInfo Culture { get; set; } = CultureInfo.CurrentCulture;

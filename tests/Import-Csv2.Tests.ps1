@@ -123,13 +123,31 @@ a,b,c
 10,xxx,1.0
 20,yyy,2.0
 "@
+        $d = Import-Csv2 $file -AsDictionary -ColumnNameMap @{
+            a = "XXX"
+            c = "ZZZ"
+        }
+
+        $d.Count | Should -Be 3
+        $d.Keys | Should -Be "XXX", "b", "ZZZ"
+
+        $d["XXX"][0] | Should -Be 10
+        $d["b"][1] | Should -Be "yyy"
+    }
+
+    It "can accept the type name mapping in combination with -RecordType" {
+        $file = New-DataFile @"
+a,b,c
+10,xxx,1.0
+20,yyy,2.0
+"@
         $d = Import-Csv2 $file -RecordType Rec -ColumnNameMap @{
             Int = "a"
             String = "b"
         }
 
         $d.Length | Should -Be 2
-        $d[0] | Should -BeOfType Rec
+        $d[0] | Should -BeOfType ([Rec])
         $d[0].Int | Should -Be 10
         $d[1].String | Should -Be "yyy"
     }
