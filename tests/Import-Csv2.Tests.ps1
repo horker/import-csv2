@@ -100,7 +100,6 @@ xxx,yyy
     class Rec {
         [int]$Int
         [string]$String
-
     }
 
     It "can map records to object instance by specifying a record type" {
@@ -117,7 +116,7 @@ Int,String,Double
         $d[1].String | Should -Be "yyy"
     }
 
-    It "can accept the type name mapping" {
+    It "can accept the column name mapping" {
         $file = New-DataFile @"
 a,b,c
 10,xxx,1.0
@@ -135,6 +134,24 @@ a,b,c
         $d["b"][1] | Should -Be "yyy"
     }
 
+    It "can accept the integer value index as key of column name mapping" {
+        $file = New-DataFile @"
+a,b,c
+10,xxx,1.0
+20,yyy,2.0
+"@
+        $d = Import-Csv2 $file -AsDictionary -ColumnNameMap @{
+            0 = "XXX"
+            2 = "ZZZ"
+        }
+
+        $d.Count | Should -Be 3
+        $d.Keys | Should -Be "XXX", "b", "ZZZ"
+
+        $d["XXX"][0] | Should -Be 10
+        $d["b"][1] | Should -Be "yyy"
+    }
+
     It "can accept the type name mapping in combination with -RecordType" {
         $file = New-DataFile @"
 a,b,c
@@ -142,8 +159,8 @@ a,b,c
 20,yyy,2.0
 "@
         $d = Import-Csv2 $file -RecordType Rec -ColumnNameMap @{
-            Int = "a"
-            String = "b"
+            "a" = "Int"
+            "b" = "String"
         }
 
         $d.Length | Should -Be 2

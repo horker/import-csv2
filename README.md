@@ -12,8 +12,6 @@ This module is a wrapper of [CsvHelper](https://joshclose.github.io/CsvHelper/),
 
 ## Installation
 
-(TBD)
-
 This module is published in the [PowerShell Gallery](https://powershellgaallery.com/pscvshelper)
 
 ```PowerShell
@@ -51,27 +49,29 @@ Species                        {setosa, setosa, setosa, setosa...}
 
 You can also obtain a `DataTable` object by invoking the cmdlet with `-AsDataTable` instead of `-AsDictionary`.
 
-You can map the data to a certain .NET class by specifying the `-RecordType` parameter.
+As another option, you can map the data to a certain .NET class by specifying the `-RecordType` parameter. Mapping from the header fields to the class properties are defined in the `-ColumnNameMap` parameter.
 
 ```PowerShell
-PS C:\> class BostonRealEstate {
->>     [double]$CRIM
->>     [double]$ZN
->>     [double]$INDUS
+PS C:\> class IrisRecord {
+>>     [string]$Species
+>>     [double]$SepalLength
+>>     [double]$SepalWidth
+>>     [double]$PetalLength
+>>     [double]$PetalWidth
 >> }
 
-PS C:\> $data = Import-Csv2 boston.csv -RecordType BostonRealEstate
+PS C:\> Import-Csv2 private\datasets\r\iris.csv -RecordType ([IrisRecord]) -ColumnNameMap @{
+>>     "Sepal.Length" = "SepalLength"
+>>     "Sepal.Width" = "SepalWidth"
+>>     "Petal.Length" = "PetalLength"
+>>     "Petal.Width" = "PetalWidth"
+>> } | ft
 
-PS C:\> $data[0].GetType().FullName
-BostonRealEstate
-
-PS C:\> $data
-
-   CRIM ZN INDUS
-   ---- -- -----
-0.00632 18  2.31
-0.02731  0  7.07
-0.02729  0  7.07
+Species SepalLength SepalWidth PetalLength PetalWidth
+------- ----------- ---------- ----------- ----------
+setosa          5.1        3.5         1.4        0.2
+setosa          4.9          3         1.4        0.2
+setosa          4.7        3.2         1.3        0.2
     :
 ```
 

@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
+using MemberTypes = CsvHelper.Configuration.MemberTypes;
 
 namespace Horker.CsvHelper
 {
@@ -100,6 +101,10 @@ namespace Horker.CsvHelper
         protected override void BeginProcessing()
         {
             var csvHelperConfig = Configuration ?? new Configuration();
+
+            csvHelperConfig.IncludePrivateMembers = true;
+            csvHelperConfig.MemberTypes = MemberTypes.Fields | MemberTypes.Properties;
+
 
             csvHelperConfig.AllowComments = AllowComments;
             csvHelperConfig.BufferSize = BufferSize;
@@ -247,12 +252,10 @@ namespace Horker.CsvHelper
         {
             if (RecordType != null)
             {
-                if (ColumnNameMap != null)
-                {
-                    var gm = typeof(ImportCsv2).GetMethod("DefineClassMap", BindingFlags.NonPublic | BindingFlags.Instance);
-                    var m = gm.MakeGenericMethod(new Type[] { RecordType });
-                    m.Invoke(this, new object[0]);
-                }
+                ColumnNameMapHolder.ColumnNameMap = ColumnNameMap;
+
+                var classMap = typeof(DynamicClassMap<>).MakeGenericType(new Type[] { RecordType });
+                _config.CsvHelperConfiguration.RegisterClassMap(classMap);
 
                 while (loader.Read())
                 {
@@ -267,21 +270,6 @@ namespace Horker.CsvHelper
                 else
                     EnumerateAsPSObject(loader);
             }
-        }
-
-        private void DefineClassMap<T>()
-        {
-            var map = new DefaultClassMap<T>();
-            foreach (DictionaryEntry entry in ColumnNameMap)
-            {
-                var member = RecordType.GetMember((string)entry.Key)[0];
-                if (entry.Value is string name)
-                    map.Map(typeof(T), member).Name(name);
-                else if (entry.Value is int index)
-                    map.Map(typeof(T), member).Index(index);
-            }
-
-            _config.CsvHelperConfiguration.RegisterClassMap(map);
         }
 
         private void EnumerateAsPSObject(CsvLoader loader)

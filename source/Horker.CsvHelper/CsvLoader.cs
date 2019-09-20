@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -106,6 +107,15 @@ namespace Horker.CsvHelper
                 {
                     if (_config.ColumnNameMap.Contains(_columnNames[i]))
                         _columnNames[i] = (string)_config.ColumnNameMap[_columnNames[i]];
+                }
+
+                foreach (DictionaryEntry entry in _config.ColumnNameMap)
+                {
+                    var key = entry.Key;
+                    if (key is int index)
+                        _columnNames[index] = entry.Value.ToString();
+                    else if (key is PSObject pso && pso.BaseObject is int index2)
+                        _columnNames[index2] = entry.Value.ToString();
                 }
             }
 
