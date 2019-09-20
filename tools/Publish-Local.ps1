@@ -1,1 +1,1 @@
-Publish-Module -path .\module\pscsvhelper\ -Repository LocalPSrepo -NuGetApiKey any
+Publish-Module -path .\module\import-csv2\ -Repository LocalPSrepo -NuGetApiKey any -vb

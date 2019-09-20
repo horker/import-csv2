@@ -1,26 +1,24 @@
-# pscsvhelper
+# import-csv2
 
 ## Overview
 
 This is a PowerShell module to import CSV files. Compared to the built-in `Import-Csv` cmdlet, it offers the following advantages:
 
-- Flexible parsing options: specifying delimiter/escaping/quoting characters, allowing comments, skipping blank lines, ignoring quotes, and trimming spaces
-- Various output data format: a sequence of `PSObject`s, a `DataTable`, an `OrderedDictionary`, and mapping to a .NET class
-- Type conversion of fields
+- Flexible parsing options: specifying delimiter/escaping/quoting characters, allowing comments, skipping blank lines, ignoring quotes, and trimming spaces.
+- Various output object formats: a sequence of `PSObject`s, a `DataTable`, an `OrderedDictionary`, and mapping to a .NET class. These efficient object formats result in better performance and memory efficiency than the built-in cmdlet.
+- Type conversion of data fields.
 
 This module is built on top of [CsvHelper](https://joshclose.github.io/CsvHelper/), a well-known .NET library for reading and writing CSV files.
 
-This module is implemented in C# for performance.
-
 ## Installation
 
-This module is published in the [PowerShell Gallery](https://powershellgaallery.com/pscvshelper)
+This module is published in the [PowerShell Gallery](https://www.powershellgallery.com/packages/import-csv2)
 
 ```PowerShell
-PS C:\> Install-Module pscsvhelper
+PS C:\> Install-Module import-csv2
 ```
 
-## Usage
+## Getting Started
 
 This module exports a single cmdlet: `Import-Csv2`. By default, this cmdlet reads a CSV file and produces a sequence of `PSObject` objects as the built-in `Import-Csv` cmdlet does.
 
@@ -33,6 +31,12 @@ Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 4.9          3           1.4          0.2         setosa
 4.7          3.2         1.3          0.2         setosa
     :
+```
+
+The cmdlet can read data from a pipeline as the `ConvertFrom-Csv` cmdlet does. The following command line works just like the above.
+
+```PowerShell
+PS C:\> Get-Content iris.csv | Import-Csv2 iris.csv | ft
 ```
 
 With the `-AsDictionary` parameter, it returns an `OrderedDictionary` object that contains a `List<T>` object for each field. This option is fast to load and memory-efficient.
@@ -49,9 +53,9 @@ Petal.Width                    {0.2, 0.2, 0.2, 0.2...}
 Species                        {setosa, setosa, setosa, setosa...}
 ```
 
-You can also obtain a `DataTable` object by invoking the cmdlet with `-AsDataTable` instead of `-AsDictionary`.
+You can also obtain a result as a `DataTable` object by invoking the cmdlet with `-AsDataTable` instead of `-AsDictionary`.
 
-As another option, you can map the data to a certain .NET class by specifying the `-RecordType` parameter. Mapping from the header fields to the class properties can be defined in the `-ColumnNameMap` parameter.
+As another option, you can assign each record in the data to a certain .NET class by specifying the `-RecordType` parameter. Mapping from the header fields to the class properties can be defined in the `-ColumnNameMap` parameter.
 
 ```PowerShell
 PS C:\> class IrisRecord {
@@ -76,6 +80,10 @@ setosa          4.9          3         1.4        0.2
 setosa          4.7        3.2         1.3        0.2
     :
 ```
+
+Note that fields and properties with the same names are implicitly tied up.
+
+### Type conversions
 
 You can specify field types by the `-ColumnType` parameter.
 
@@ -104,7 +112,7 @@ The following parsing options are available:
 |-KeepBlankLines|Indicates if blank lines should be ignored when reading.|
 |-Strict|Indicates to raise an error when the number of fields is different from that of the header record.|
 
-For the cmoplete reference, see the [help topic](https://github.com/horker/pscsvhelper/blob/docs/Import-Csv2.md) of the cmdlet.
+For the complete reference, see the [help topic](https://github.com/horker/import-csv2/blob/master/docs/Import-Csv2.md) of the cmdlet.
 
 ## License
 

@@ -1,7 +1,7 @@
 ---
 external help file: Horker.CsvHelper.PowerShell.dll-Help.xml
-Module Name: pscsvhelper
-online version: https://github.com/horker/pscsvhelper/blob/docs/Import-Csv2.md
+Module Name: import-csv2
+online version: https://github.com/horker/import-csv2/blob/master/docs/Import-Csv2.md
 schema: 2.0.0
 ---
 
@@ -24,7 +24,7 @@ Import-Csv2 [[-Path] <String>] [[-Encoding] <Encoding>] [-AllowComments] [[-Buff
 ## DESCRIPTION
 This cmdlet reads a file or a pipeline stream, parses its content as the CSV format and returns the resultant objects in several formats.
 
-Compared to the built-in `Import-Csv` cmdlet, this cmdlet provides greater flexibility in parsing, better performance and memory efficiency.
+Compared to the built-in `Import-Csv` cmdlet, this cmdlet provides greater flexibility in parsing and supports efficient object formats.
 
 This cmdlet is built on top of CsvHelper, the well-known .NET library for reading or writing CSV files.
 
@@ -417,7 +417,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Data.DataTable,
+### System.Data.DataTable
 ### System.Collections.Specialized.OrderedDictionary
 ### System.Object
 

@@ -9,8 +9,8 @@ Set-StrictMode -Version Latest
 $SOURCE_PATH = "$PSScriptRoot\source"
 $SCRIPT_PATH = "$PSScriptRoot\scripts"
 
-$MODULE_PATH = "$PSScriptRoot\module\pscsvhelper"
-$MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\pscsvhelper"
+$MODULE_PATH = "$PSScriptRoot\module\import-csv2"
+$MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\import-csv2"
 
 $SOLUTION_FILE = "$PSScriptRoot\source\Horker.CsvHelper.sln"
 

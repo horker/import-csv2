@@ -10,7 +10,9 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Import a CSV file.</maml:para>
+      <maml:para>This cmdlet reads a file or a pipeline stream, parses its content as the CSV format and returns the resultant objects in several formats.</maml:para>
+      <maml:para>Compared to the built-in `Import-Csv` cmdlet, this cmdlet provides greater flexibility in parsing and supports efficient object formats.</maml:para>
+      <maml:para>This cmdlet is built on top of CsvHelper, the well-known .NET library for reading or writing CSV files.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -602,7 +604,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None</maml:name>
+          <maml:name>System.String</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -610,6 +612,22 @@
       </command:inputType>
     </command:inputTypes>
     <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Data.DataTable</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Collections.Specialized.OrderedDictionary</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
       <command:returnValue>
         <dev:type>
           <maml:name>System.Object</maml:name>
@@ -628,7 +646,11 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/horker/pscsvhelper/blob/docs/Import-Csv2.md</maml:uri>
+        <maml:uri>https://github.com/horker/import-csv2/blob/master/docs/Import-Csv2.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>CsvHelper</maml:linkText>
+        <maml:uri>https://joshclose.github.io/CsvHelper</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
