@@ -5,10 +5,12 @@
 This is a PowerShell module to import CSV files. Compared to the built-in `Import-Csv` cmdlet, it offers the following advantages:
 
 - Flexible parsing options: specifying delimiter/escaping/quoting characters, allowing comments, skipping blank lines, ignoring quotes, and trimming spaces
-- Various output data format: a `PSObject` sequence, a `DataTable`, an `OrderedDictionary`, and mapping to a .NET class
+- Various output data format: a sequence of `PSObject`s, a `DataTable`, an `OrderedDictionary`, and mapping to a .NET class
 - Type conversion of fields
 
-This module is a wrapper of [CsvHelper](https://joshclose.github.io/CsvHelper/), a well-known .NET library for reading and writing CSV files.
+This module is built on top of [CsvHelper](https://joshclose.github.io/CsvHelper/), a well-known .NET library for reading and writing CSV files.
+
+This module is implemented in C# for performance.
 
 ## Installation
 
@@ -18,12 +20,12 @@ This module is published in the [PowerShell Gallery](https://powershellgaallery.
 PS C:\> Install-Module pscsvhelper
 ```
 
-## Basic usage
+## Usage
 
-This module exports a single cmdlet: `Import-Csv2`. By default, this cmdlet reads a CSV file and produces a sequence of `PSObject` instances as the built-in `Import-Csv` cmdlet does.
+This module exports a single cmdlet: `Import-Csv2`. By default, this cmdlet reads a CSV file and produces a sequence of `PSObject` objects as the built-in `Import-Csv` cmdlet does.
 
 ```PowerShell
-PS C:\> Import-Csv2 -Path iris.csv | ft
+PS C:\> Import-Csv2 iris.csv | ft
 
 Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 ------------ ----------- ------------ ----------- -------
@@ -36,7 +38,7 @@ Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 With the `-AsDictionary` parameter, it returns an `OrderedDictionary` object that contains a `List<T>` object for each field. This option is fast to load and memory-efficient.
 
 ```PowerShell
-PS C:\> Import-Csv2 -Path iris.csv -AsDictionary
+PS C:\> Import-Csv2 iris.csv -AsDictionary
 
 Name                           Value
 ----                           -----
@@ -49,7 +51,7 @@ Species                        {setosa, setosa, setosa, setosa...}
 
 You can also obtain a `DataTable` object by invoking the cmdlet with `-AsDataTable` instead of `-AsDictionary`.
 
-As another option, you can map the data to a certain .NET class by specifying the `-RecordType` parameter. Mapping from the header fields to the class properties are defined in the `-ColumnNameMap` parameter.
+As another option, you can map the data to a certain .NET class by specifying the `-RecordType` parameter. Mapping from the header fields to the class properties can be defined in the `-ColumnNameMap` parameter.
 
 ```PowerShell
 PS C:\> class IrisRecord {
@@ -60,7 +62,7 @@ PS C:\> class IrisRecord {
 >>     [double]$PetalWidth
 >> }
 
-PS C:\> Import-Csv2 private\datasets\r\iris.csv -RecordType ([IrisRecord]) -ColumnNameMap @{
+PS C:\> Import-Csv2 iris.csv -RecordType ([IrisRecord]) -ColumnNameMap @{
 >>     "Sepal.Length" = "SepalLength"
 >>     "Sepal.Width" = "SepalWidth"
 >>     "Petal.Length" = "PetalLength"
@@ -75,7 +77,16 @@ setosa          4.7        3.2         1.3        0.2
     :
 ```
 
-## Parsing options
+You can specify field types by the `-ColumnType` parameter.
+
+```PowerShell
+PS C:\> $data = import-Csv2 iris.csv -AsDictionary -ColumnTypes @{ "Sepal.Width" = [double] }
+
+PS C:\> $data["Sepal.Width"].GetType().FullName
+System.Collections.Generic.List`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
+```
+
+### Parsing options
 
 The following parsing options are available:
 
@@ -93,18 +104,7 @@ The following parsing options are available:
 |-KeepBlankLines|Indicates if blank lines should be ignored when reading.|
 |-Strict|Indicates to raise an error when the number of fields is different from that of the header record.|
 
-For the other parameters, see [the help topic of the cmdlet](https://github.com/horker/pscsvhelper/blob/docs/Import-Csv2.md).
-
-## Type conversions
-
-You can specify field types by the `-ColumnType` parameter.
-
-```PowerShell
-PS C:\> $data = import-Csv2 iris.csv -AsDictionary -ColumnTypes @{ "Sepal.Width" = [double] }
-
-PS C:\> $data["Sepal.Width"].GetType().FullName
-System.Collections.Generic.List`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
-```
+For the cmoplete reference, see the [help topic](https://github.com/horker/pscsvhelper/blob/docs/Import-Csv2.md) of the cmdlet.
 
 ## License
 

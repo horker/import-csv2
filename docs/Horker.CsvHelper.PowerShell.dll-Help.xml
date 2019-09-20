@@ -257,8 +257,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ColumnNameMap</maml:name>
           <maml:Description>
-            <maml:para>Specifies the mapping from the field names in the input file to the field names in the output object.</maml:para>
-            <maml:para>With the `-RecordType` parameter, this parameter represents the mapping from the class member names to the field names or the column index in the input file.</maml:para>
+            <maml:para>Specifies the mapping from the field names or field indexes in the input file to the field names in the output object.</maml:para>
+            <maml:para>With the `-RecordType` parameter, this parameter represents the mapping from the field names or field indexes in the input file to the class field or property names.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
           <dev:type>
@@ -551,8 +551,8 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ColumnNameMap</maml:name>
         <maml:Description>
-          <maml:para>Specifies the mapping from the field names in the input file to the field names in the output object.</maml:para>
-          <maml:para>With the `-RecordType` parameter, this parameter represents the mapping from the class member names to the field names or the column index in the input file.</maml:para>
+          <maml:para>Specifies the mapping from the field names or field indexes in the input file to the field names in the output object.</maml:para>
+          <maml:para>With the `-RecordType` parameter, this parameter represents the mapping from the field names or field indexes in the input file to the class field or property names.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">IDictionary</command:parameterValue>
         <dev:type>

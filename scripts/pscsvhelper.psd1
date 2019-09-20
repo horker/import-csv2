@@ -31,9 +31,13 @@ Copyright = '(c) 2019 horker. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
-Wrapper cmdlets for Josh Close's CsvHelper (https://joshclose.github.io/CsvHelper/)
+This is a PowerShell module to import CSV files.
 
-For more details, see https://github.com/horker/pscsvhelper
+Compared to the built-in `Import-Csv` cmdlet, this cmdlet provides greater flexibility in parsing, better performance and memory efficiency.
+
+This module is built on top of CsvHelper (https://joshclose.github.io/CsvHelper/), a well-known .NET library for reading and writing CSV files.
+
+For more details, see the project site (https://github.com/horker/pscsvhelper)
 "@
 
 # Minimum version of the Windows PowerShell engine required by this module

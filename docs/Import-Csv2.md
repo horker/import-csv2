@@ -22,7 +22,11 @@ Import-Csv2 [[-Path] <String>] [[-Encoding] <Encoding>] [-AllowComments] [[-Buff
 ```
 
 ## DESCRIPTION
-Import a CSV file.
+This cmdlet reads a file or a pipeline stream, parses its content as the CSV format and returns the resultant objects in several formats.
+
+Compared to the built-in `Import-Csv` cmdlet, this cmdlet provides greater flexibility in parsing, better performance and memory efficiency.
+
+This cmdlet is built on top of CsvHelper, the well-known .NET library for reading or writing CSV files.
 
 ## EXAMPLES
 
@@ -341,9 +345,9 @@ Accept wildcard characters: False
 ```
 
 ### -ColumnNameMap
-Specifies the mapping from the field names in the input file to the field names in the output object.
+Specifies the mapping from the field names or field indexes in the input file to the field names in the output object.
 
-With the `-RecordType` parameter, this parameter represents the mapping from the class member names to the field names or the column index in the input file.
+With the `-RecordType` parameter, this parameter represents the mapping from the field names or field indexes in the input file to the class field or property names.
 
 ```yaml
 Type: IDictionary
@@ -409,11 +413,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.String
 
 ## OUTPUTS
 
+### System.Data.DataTable,
+### System.Collections.Specialized.OrderedDictionary
 ### System.Object
+
 ## NOTES
 
 ## RELATED LINKS
+
+[CsvHelper](https://joshclose.github.io/CsvHelper)
