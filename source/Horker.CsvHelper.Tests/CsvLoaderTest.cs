@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using CsvHelper.Configuration;
+using System.Globalization;
 
 namespace Horker.CsvHelper.Tests
 {
@@ -30,7 +31,7 @@ xxx,yyy,zzz
 
             var config = new Config()
             {
-                CsvHelperConfiguration = new Configuration()
+                CsvHelperConfiguration = new CsvConfiguration(CultureInfo.CurrentCulture)
             };
 
             using (var reader = new StreamReader(file))
@@ -53,7 +54,7 @@ xxx,yyy,zzz
 
             var config = new Config()
             {
-                CsvHelperConfiguration = new Configuration(),
+                CsvHelperConfiguration = new CsvConfiguration(CultureInfo.CurrentCulture),
                 ColumnTypes = new Dictionary<string, Type>()
                 {
                     { "zzz", typeof(int) }
@@ -81,7 +82,7 @@ xxx,yyy,zzz
 
             var config = new Config()
             {
-                CsvHelperConfiguration = new Configuration(),
+                CsvHelperConfiguration = new CsvConfiguration(CultureInfo.CurrentCulture),
                 ColumnTypes = new Dictionary<string, Type>()
                 {
                     { "zzz", typeof(DateTime) }

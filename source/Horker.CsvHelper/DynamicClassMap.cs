@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Management.Automation;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Horker.CsvHelper
     {
         public DynamicClassMap()
         {
-            AutoMap();
+            AutoMap(CultureInfo.CurrentCulture);
 
             var map = ColumnNameMapHolder.ColumnNameMap;
 

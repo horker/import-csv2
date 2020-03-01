@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.CsvHelper", "Horker.CsvHelper\Horker.CsvHelper.csproj", "{8FE45285-FD37-4AE5-A466-A9AC64BD42C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horker.CsvHelper", "Horker.CsvHelper\Horker.CsvHelper.csproj", "{E40EFEE3-1016-4FE3-8B07-56877DA11088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.CsvHelper.PowerShell", "Horker.CsvHelper.PowerShell\Horker.CsvHelper.PowerShell.csproj", "{FDDCD24F-6B3A-4DAE-88B8-9E93148AD2CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horker.CsvHelper.PowerShell", "Horker.CsvHelper.PowerShell\Horker.CsvHelper.PowerShell.csproj", "{EC28B4A8-7504-41A4-946F-EF5234466621}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horker.CsvHelper.Tests", "Horker.CsvHelper.Tests\Horker.CsvHelper.Tests.csproj", "{E5725D4B-A2BF-4908-92C4-C150681CD702}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horker.CsvHelper.Tests", "Horker.CsvHelper.Tests\Horker.CsvHelper.Tests.csproj", "{6B3C080B-1CF9-4780-8808-1A724A635338}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8FE45285-FD37-4AE5-A466-A9AC64BD42C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FE45285-FD37-4AE5-A466-A9AC64BD42C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FE45285-FD37-4AE5-A466-A9AC64BD42C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FE45285-FD37-4AE5-A466-A9AC64BD42C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDDCD24F-6B3A-4DAE-88B8-9E93148AD2CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDDCD24F-6B3A-4DAE-88B8-9E93148AD2CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDDCD24F-6B3A-4DAE-88B8-9E93148AD2CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDDCD24F-6B3A-4DAE-88B8-9E93148AD2CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5725D4B-A2BF-4908-92C4-C150681CD702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5725D4B-A2BF-4908-92C4-C150681CD702}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5725D4B-A2BF-4908-92C4-C150681CD702}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5725D4B-A2BF-4908-92C4-C150681CD702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E40EFEE3-1016-4FE3-8B07-56877DA11088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E40EFEE3-1016-4FE3-8B07-56877DA11088}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E40EFEE3-1016-4FE3-8B07-56877DA11088}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E40EFEE3-1016-4FE3-8B07-56877DA11088}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC28B4A8-7504-41A4-946F-EF5234466621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC28B4A8-7504-41A4-946F-EF5234466621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC28B4A8-7504-41A4-946F-EF5234466621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC28B4A8-7504-41A4-946F-EF5234466621}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B3C080B-1CF9-4780-8808-1A724A635338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B3C080B-1CF9-4780-8808-1A724A635338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B3C080B-1CF9-4780-8808-1A724A635338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B3C080B-1CF9-4780-8808-1A724A635338}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

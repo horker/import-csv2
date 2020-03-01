@@ -86,7 +86,7 @@ namespace Horker.CsvHelper
         public IDictionary ColumnNameMap = null;
 
         [Parameter(Position = 21, Mandatory = false)]
-        public Configuration Configuration = null;
+        public CsvConfiguration Configuration = null;
 
         [Parameter(Position = 22, Mandatory = false, ValueFromPipeline = true)]
         public string InputObject = null;
@@ -100,7 +100,7 @@ namespace Horker.CsvHelper
 
         protected override void BeginProcessing()
         {
-            var csvHelperConfig = Configuration ?? new Configuration();
+            var csvHelperConfig = Configuration ?? new CsvConfiguration(CultureInfo.CurrentCulture);
 
             csvHelperConfig.IncludePrivateMembers = true;
             csvHelperConfig.MemberTypes = MemberTypes.Fields | MemberTypes.Properties;

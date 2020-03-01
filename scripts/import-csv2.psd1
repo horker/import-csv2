@@ -12,10 +12,10 @@
 RootModule = 'import-csv2.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0'
+ModuleVersion = '2.0.0'
 
 # Supported PSEditions
-# CompatiblePSEditions = ''
+CompatiblePSEditions = 'Core'
 
 # ID used to uniquely identify this module
 GUID = '77c999e2-1729-4fe1-86d6-8e5fc2c6bd29'
@@ -27,7 +27,7 @@ Author = 'horker'
 CompanyName = 'horker'
 
 # Copyright statement for this module
-Copyright = '(c) 2019 horker. All rights reserved.'
+Copyright = '(c) 2020 horker. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = @"
@@ -41,7 +41,7 @@ For more details, see the project site (https://github.com/horker/import-csv2)
 "@
 
 # Minimum version of the Windows PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '6.0'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -50,7 +50,7 @@ For more details, see the project site (https://github.com/horker/import-csv2)
 # PowerShellHostVersion = ''
 
 # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-DotNetFrameworkVersion = '4.7.2'
+#DotNetFrameworkVersion = '4.7.2'
 
 # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
 # CLRVersion = ''
@@ -125,6 +125,10 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
+v2.0.0
+Support for PowerShell Core 6 and higher
+Drop support for Windows PowerShell
+
 v1.0.0
 First release
 "@

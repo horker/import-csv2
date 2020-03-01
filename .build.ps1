@@ -14,12 +14,16 @@ $MODULE_PATH_DEBUG = "$PSScriptRoot\module\debug\import-csv2"
 
 $SOLUTION_FILE = "$PSScriptRoot\source\Horker.CsvHelper.sln"
 
+
+$PACKAGE_PATH = "$SOURCE_PATH\\packages\CsvHelper.15.0.0\lib\netstandard2.1"
+$DLL_PATH = "$SOURCE_PATH\Horker.CsvHelper.PowerShell\bin\Release\netcoreapp2.1"
+
 $OBJECT_FILES = @(
-    "CsvHelper.dll"
-    "Horker.CsvHelper.dll"
-    "Horker.CsvHelper.pdb"
-    "Horker.CsvHelper.PowerShell.dll"
-    "Horker.CsvHelper.PowerShell.pdb"
+    "$PACKAGE_PATH\CsvHelper.dll"
+    "$DLL_PATH\Horker.CsvHelper.dll"
+    "$DLL_PATH\Horker.CsvHelper.pdb"
+    "$DLL_PATH\Horker.CsvHelper.PowerShell.dll"
+    "$DLL_PATH\Horker.CsvHelper.PowerShell.pdb"
 )
 
 $HELP_XML = "$PSScriptRoot\docs\Horker.CsvHelper.PowerShell.dll-Help.xml"
@@ -99,21 +103,19 @@ task Build {
 
     function Copy-ObjectFiles {
       param(
-        [string]$targetPath,
-        [string]$objectPath
+        [string]$targetPath
       )
 
       New-Folder2 $targetPath
 
       Copy-Item2 "$SCRIPT_PATH\*" $targetPath
       $OBJECT_FILES | foreach {
-        $path = Join-Path $objectPath $_
-        Copy-Item2 $path $targetPath
+        Copy-Item2 $_ $targetPath
       }
     }
 
-    Copy-ObjectFiles $MODULE_PATH "$SOURCE_PATH\bin\Release"
-    Copy-ObjectFiles $MODULE_PATH_DEBUG "$SOURCE_PATH\bin\Debug"
+    Copy-ObjectFiles $MODULE_PATH
+    Copy-ObjectFiles $MODULE_PATH_DEBUG
 
     Copy-Item2 $HELP_XML $MODULE_PATH
     Copy-Item2 $HELP_XML $MODULE_PATH_DEBUG

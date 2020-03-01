@@ -11,7 +11,7 @@ namespace Horker.CsvHelper
 {
     public class Config
     {
-        public Configuration CsvHelperConfiguration { get; set; } = null;
+        public CsvConfiguration CsvHelperConfiguration { get; set; } = null;
         public int InitialCapacity { get; set; } = 1024;
         public string[] ColumnNames { get; set; } = null;
         public IDictionary ColumnNameMap { get; set; } = null;
