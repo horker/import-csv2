@@ -18,7 +18,7 @@ Import-Csv2 [[-Path] <String>] [[-Encoding] <Encoding>] [-AllowComments] [[-Buff
  [-IgnoreQuote] [[-QuoteChar] <Char>] [[-TrimOption] <TrimOptions>] [[-InitialCapacity] <Int32>]
  [[-ColumnNames] <String[]>] [-Strict] [[-RecordType] <Type>] [-AsDictionary] [-AsDataTable]
  [[-ColumnTypes] <IDictionary>] [-Culture <CultureInfo>] [-ColumnNameMap <IDictionary>]
- [-Configuration <Configuration>] [-InputObject <String>] [<CommonParameters>]
+ [-Configuration <Configuration>] [-ReadCount <Int32>] [-InputObject <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -405,6 +405,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ReadCount
+Specifies the maximum number of records to read at a time. Can be piped to `ForEach-Object` to read each batch of records. Only works with the `-AsDataTable` parameter.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

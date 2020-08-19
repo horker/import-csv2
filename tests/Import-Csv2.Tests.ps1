@@ -1,13 +1,20 @@
 
-function New-DataFile {
-    param(
-        [string]$Data
-    )
+BeforeAll {
+    function New-DataFile {
+        param(
+            [string]$Data
+        )
 
-    $file = [IO.Path]::GetTempFileName()
-    $data | Set-Content $file
+        $file = [IO.Path]::GetTempFileName()
+        $data | Set-Content $file
 
-    $file
+        $file
+    }
+
+    class Rec {
+        [int]$Int
+        [string]$String
+    }
 }
 
 Describe "Test Import-Csv2" {
@@ -94,12 +101,7 @@ xxx,yyy
         {
             $ErrorActionPreference = "Stop"
             Import-Csv2 $file -Strict
-        } | Should -Throw "not enough"
-    }
-
-    class Rec {
-        [int]$Int
-        [string]$String
+        } | Should -Throw "*not enough*"
     }
 
     It "can map records to object instance by specifying a record type" {
@@ -202,7 +204,7 @@ a,b,c
         $d[2].c | Should -Be 2.0
     }
 
-    It "returns nothign for empty imput" {
+    It "returns nothing for empty imput" {
         $d = Import-Csv2
 
         $d | Should -Be $null
