@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -86,9 +87,12 @@ namespace Horker.CsvHelper
         public IDictionary ColumnNameMap = null;
 
         [Parameter(Position = 21, Mandatory = false)]
-        public CsvConfiguration Configuration = null;
+        public Configuration Configuration = null;
 
-        [Parameter(Position = 22, Mandatory = false, ValueFromPipeline = true)]
+        [Parameter(Position = 22, Mandatory = false)]
+        public int ReadCount = 0;
+
+        [Parameter(Position = 23, Mandatory = false, ValueFromPipeline = true)]
         public string InputObject = null;
 
         private Config _config;
@@ -100,7 +104,7 @@ namespace Horker.CsvHelper
 
         protected override void BeginProcessing()
         {
-            var csvHelperConfig = Configuration ?? new CsvConfiguration(CultureInfo.CurrentCulture);
+            var csvHelperConfig = Configuration ?? new Configuration();
 
             csvHelperConfig.IncludePrivateMembers = true;
             csvHelperConfig.MemberTypes = MemberTypes.Fields | MemberTypes.Properties;
@@ -156,9 +160,46 @@ namespace Horker.CsvHelper
                         foreach (DictionaryEntry entry in ColumnTypes)
                             dt.Columns.Add((string)entry.Key, (Type)entry.Value);
                     }
+                    else
+                    {
+                        for (int i = 0; i < csvDataReader.FieldCount; i++)
+                        {
+                            dt.Columns.Add(csvDataReader.GetName(i), csvDataReader.GetFieldType(i));
+                        }
+                    }
 
-                    dt.Load(csvDataReader);
-                    WriteObject(dt);
+                    if (ReadCount > 0)
+                    {
+                        int rowCount = 0;
+                        while (csvDataReader.Read())
+                        {
+                            if (rowCount % ReadCount == 0) WriteVerbose($"Starting batch of {ReadCount}  ({rowCount} records processed)");
+
+                            string[] row = new String[csvDataReader.FieldCount];
+                            
+                            csvDataReader.GetValues(row);
+                            dt.LoadDataRow(row, true);
+
+                            rowCount++;
+
+                            if (rowCount % ReadCount == 0)
+                            {
+                                WriteObject(dt.Copy());
+                                dt.Clear();
+                            }
+                        }
+                        // Write out remaining rows, if any.
+                        if (dt.Rows.Count > 0)
+                        {
+                            WriteObject(dt);
+                        }
+                        
+                    }
+                    else
+                    {
+                        dt.Load(csvDataReader);
+                        WriteObject(dt);
+                    }
                 }
 
                 return;
